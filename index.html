@@ -68,6 +68,19 @@
     <label>To: <input type="number" id="toRound" min="1"></label>
     <label>開催日 From: <input type="date" id="fromDate"></label>
     <label>To: <input type="date" id="toDate"></label>
+    
+    <div>
+      <label><input type="checkbox" class="feature" value="連番あり"> 連番あり <span class="info-icon" data-info="連続した数字が含まれています（例：12・13）">ⓘ</span></label>
+      <label><input type="checkbox" class="feature" value="奇数多め"> 奇数多め <span class="info-icon" data-info="奇数が5個以上含まれています">ⓘ</span></label>
+      <label><input type="checkbox" class="feature" value="偶数多め"> 偶数多め <span class="info-icon" data-info="偶数が5個以上含まれています">ⓘ</span></label>
+      <label><input type="checkbox" class="feature" value="下一桁かぶり"> 下一桁かぶり <span class="info-icon" data-info="下一桁が同じ数字（例：11・21・31）が複数含まれています">ⓘ</span></label>
+      <label><input type="checkbox" class="feature" value="合計小さめ"> 合計小さめ <span class="info-icon" data-info="数字の合計が160未満です">ⓘ</span></label>
+      <label><input type="checkbox" class="feature" value="合計大きめ"> 合計大きめ <span class="info-icon" data-info="数字の合計が220を超えています">ⓘ</span></label>
+      <label><input type="checkbox" class="feature" value="10番台集中"> 10番台集中 <span class="info-icon" data-info="10〜19の数字が3つ以上あります">ⓘ</span></label>
+      <label><input type="checkbox" class="feature" value="30番台多め"> 30番台多め <span class="info-icon" data-info="30〜37の数字が3つ以上あります">ⓘ</span></label>
+      <label><input type="checkbox" class="feature" value="高低ミックス"> 高低ミックス <span class="info-icon" data-info="10未満と30超の数字が両方含まれています">ⓘ</span></label>
+    </div>
+
     <button onclick="filterResults()">🔍 検索</button>
   </div>
 
@@ -155,5 +168,25 @@
       loadData();
     });
   </script>
+
+  <div id="popupBox" class="popup" style="display:none; position:absolute;"></div>
+  <script>
+    const popup = document.getElementById("popupBox");
+    document.addEventListener("mouseover", function(e) {
+      if (e.target.classList.contains("info-icon")) {
+        popup.textContent = e.target.getAttribute("data-info");
+        const rect = e.target.getBoundingClientRect();
+        popup.style.left = rect.left + "px";
+        popup.style.top = (rect.bottom + window.scrollY + 6) + "px";
+        popup.style.display = "block";
+      }
+    });
+    document.addEventListener("mouseout", function(e) {
+      if (e.target.classList.contains("info-icon")) {
+        popup.style.display = "none";
+      }
+    });
+  </script>
+
 </body>
 </html>
