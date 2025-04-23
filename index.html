@@ -174,10 +174,10 @@
 <table id="resultTable">
 <thead>
 <tr>
-<th>開催回</th><th>日付</th><th>本数字</th><th>ボーナス</th><th>特徴</th>
-<th>1等賞金</th><th>1等口数</th><th>2等賞金</th><th>2等口数</th>
-<th>3等賞金</th><th>3等口数</th><th>4等賞金</th><th>4等口数</th>
-<th>5等賞金</th><th>5等口数</th><th>6等賞金</th><th>6等口数</th><th>キャリーオーバー</th>
+<th style="cursor: pointer;" title="クリックで並び替え">開催回 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">日付 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">本数字 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">ボーナス 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">特徴 🔽</th>
+<th style="cursor: pointer;" title="クリックで並び替え">1等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">1等口数 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">2等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">2等口数 🔽</th>
+<th style="cursor: pointer;" title="クリックで並び替え">3等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">3等口数 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">4等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">4等口数 🔽</th>
+<th style="cursor: pointer;" title="クリックで並び替え">5等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">5等口数 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">6等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">6等口数 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">キャリーオーバー 🔽</th>
 </tr>
 </thead>
 <tbody></tbody>
@@ -293,7 +293,7 @@ function featureQuickSearch(feature) {
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    loadData();
+    loadData().then(() => attachSortEvents());
   });
 
   function resetFilters() {
@@ -319,6 +319,35 @@ function featureQuickSearch(feature) {
     cb.checked = cb.value === feature;
   });
   filterResults();
+}
+
+
+let sortDirection = {};
+
+function sortTable(columnIndex) {
+  const table = document.getElementById("resultTable");
+  const tbody = table.querySelector("tbody");
+  const rows = Array.from(tbody.querySelectorAll("tr"));
+  const isAsc = !sortDirection[columnIndex];
+  sortDirection[columnIndex] = isAsc;
+
+  rows.sort((a, b) => {
+    const aText = a.children[columnIndex].textContent.trim().replace(/[^\d.-]/g, "");
+    const bText = b.children[columnIndex].textContent.trim().replace(/[^\d.-]/g, "");
+    const aVal = isNaN(aText) ? aText : parseFloat(aText);
+    const bVal = isNaN(bText) ? bText : parseFloat(bText);
+    return isAsc ? (aVal > bVal ? 1 : -1) : (aVal < bVal ? 1 : -1);
+  });
+
+  rows.forEach(row => tbody.appendChild(row));
+}
+
+// ソート用クリックイベント登録（loadData完了後に実行されるようにする）
+function attachSortEvents() {
+  const headers = document.querySelectorAll("#resultTable th");
+  headers.forEach((header, index) => {
+    header.addEventListener("click", () => sortTable(index));
+  });
 }
 
 </script>
