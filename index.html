@@ -108,6 +108,17 @@
     cursor: pointer;
   }
 
+
+  .search-button {
+    background: #e46c6c;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+
 </style>
 </head>
 <body>
@@ -148,7 +159,7 @@
       <label><input type="checkbox" class="feature" value="キャリーあり"> キャリーあり</label>
       <span class="info-icon" onclick="showPopup(event, 'キャリーオーバーが発生していた回です。')">ⓘ</span>
     </div>
-    <button class="filters-button" onclick="filterResults()">🔍 検索</button>
+    <button class="search-button" onclick="filterResults()">🔍 検索</button>
   </div>
 
   <div class="scroll-container" id="scrollContainer">
