@@ -204,7 +204,15 @@
         hidePopup();
       }
     });
-  </script>
+  
+function featureQuickSearch(feature) {
+  document.querySelectorAll(".feature").forEach(cb => {
+    cb.checked = cb.value === feature;
+  });
+  filterResults();
+}
+
+</script>
 <script>
   let data = [];
 
@@ -234,7 +242,7 @@
       const bonus = [item["BONUS数字1"], item["BONUS数字2"]].join("・");
       const row = `
         <tr>
-          <td>${item["開催回"]}</td><td>${item["日付"]}</td><td>${nums}</td><td>${bonus}</td><td>${item["特徴"] || ""}</td>
+          <td>${item["開催回"]}</td><td>${item["日付"]}</td><td>${nums}</td><td>${bonus}</td><td>${(item["特徴"] || "").split("・").map(f => `<a href="#" onclick="featureQuickSearch('${f}')">${f}</a>`).join("・")}</td>
           <td>${formatYen(item["1等賞金"])}</td><td>${item["1等口数"]}</td>
           <td>${formatYen(item["2等賞金"])}</td><td>${item["2等口数"]}</td>
           <td>${formatYen(item["3等賞金"])}</td><td>${item["3等口数"]}</td>
@@ -304,6 +312,14 @@
       document.getElementById("lastUpdated").textContent = `最終更新日：${latest}`;
 
   }
+
+
+function featureQuickSearch(feature) {
+  document.querySelectorAll(".feature").forEach(cb => {
+    cb.checked = cb.value === feature;
+  });
+  filterResults();
+}
 
 </script>
 </body>
