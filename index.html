@@ -79,19 +79,33 @@
       box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
       z-index: 999;
     }
-  </style>
+  
+    td:first-child, th:first-child {
+      position: sticky;
+      left: 0;
+      background: #fff0f0;
+      z-index: 2;
+    }
+
+</style>
 </head>
 <body>
   <h1>ロト7結果検索ツール</h1>
+
+  <nav style="margin-bottom: 16px;">
+    <a href="https://po-3.github.io/loto6-data/" style="margin-right: 12px;">🔗 ロト6</a>
+    <a href="https://po-3.github.io/miniloto-data/">🔗 ミニロト</a>
+  </nav>
+
   <p>開催回・日付・抽選数字の特徴などで直感的に検索できます。</p>
 
-  <div class="filters">
+  <div class="filters" style="display: flex; flex-direction: column; flex-wrap: wrap;">
     <label>開催回 From: <input type="number" id="fromRound" min="1"></label>
     <label>To: <input type="number" id="toRound" min="1"></label>
     <label>開催日 From: <input type="date" id="fromDate"></label>
     <label>To: <input type="date" id="toDate"></label>
     
-    <div>
+    <div style="display: flex; flex-wrap: wrap; gap: 8px;">
       <label><input type="checkbox" class="feature" value="連番あり"> 連番あり</label>
       <span class="info-icon" onclick="showPopup(event, '連続した数字（例：24・25など）を含む構成です。')">ⓘ</span>
       <label><input type="checkbox" class="feature" value="奇数多め"> 奇数多め</label>
