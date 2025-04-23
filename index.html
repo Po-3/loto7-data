@@ -174,10 +174,10 @@
 <table id="resultTable">
 <thead>
 <tr>
-<th style="cursor: pointer;" title="クリックで並び替え">開催回 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">日付 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">本数字 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">ボーナス 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">特徴 🔽</th>
-<th style="cursor: pointer;" title="クリックで並び替え">1等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">1等口数 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">2等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">2等口数 🔽</th>
-<th style="cursor: pointer;" title="クリックで並び替え">3等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">3等口数 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">4等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">4等口数 🔽</th>
-<th style="cursor: pointer;" title="クリックで並び替え">5等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">5等口数 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">6等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">6等口数 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">キャリーオーバー 🔽</th>
+<th style="cursor: pointer;">開催回 🔽</th><th style="cursor: pointer;">日付 🔽</th><th style="cursor: pointer;">本数字 🔽</th><th style="cursor: pointer;">ボーナス 🔽</th><th style="cursor: pointer;">特徴 🔽</th>
+<th style="cursor: pointer;">1等賞金 🔽</th><th style="cursor: pointer;">1等口数 🔽</th><th style="cursor: pointer;">2等賞金 🔽</th><th style="cursor: pointer;">2等口数 🔽</th>
+<th style="cursor: pointer;">3等賞金 🔽</th><th style="cursor: pointer;">3等口数 🔽</th><th style="cursor: pointer;">4等賞金 🔽</th><th style="cursor: pointer;">4等口数 🔽</th>
+<th style="cursor: pointer;">5等賞金 🔽</th><th style="cursor: pointer;">5等口数 🔽</th><th style="cursor: pointer;">6等賞金 🔽</th><th style="cursor: pointer;">6等口数 🔽</th><th style="cursor: pointer;">キャリーオーバー 🔽</th>
 </tr>
 </thead>
 <tbody></tbody>
@@ -213,6 +213,15 @@ function featureQuickSearch(feature) {
 }
 
 
+
+  const headers = document.querySelectorAll("#resultTable th");
+  headers.forEach((header, index) => {
+    header.addEventListener("click", () => sortTable(index));
+    header.title = "クリックで並び替え";
+  });
+});
+
+
 let sortDirection = {};
 
 function sortTable(columnIndex) {
@@ -234,6 +243,8 @@ function sortTable(columnIndex) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  loadData().then(() => filterResults());
+
   const headers = document.querySelectorAll("#resultTable th");
   headers.forEach((header, index) => {
     header.addEventListener("click", () => sortTable(index));
@@ -350,6 +361,15 @@ function featureQuickSearch(feature) {
 }
 
 
+
+  const headers = document.querySelectorAll("#resultTable th");
+  headers.forEach((header, index) => {
+    header.addEventListener("click", () => sortTable(index));
+    header.title = "クリックで並び替え";
+  });
+});
+
+
 let sortDirection = {};
 
 function sortTable(columnIndex) {
@@ -371,6 +391,8 @@ function sortTable(columnIndex) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  loadData().then(() => filterResults());
+
   const headers = document.querySelectorAll("#resultTable th");
   headers.forEach((header, index) => {
     header.addEventListener("click", () => sortTable(index));
