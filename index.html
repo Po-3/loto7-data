@@ -154,5 +154,76 @@
     });
   </script>
 
+
+<script>
+  let data = [];
+
+  function formatYen(value) {
+    if (value === "" || value === null || value === undefined) return "0円";
+    if (isNaN(value)) return "-";
+    const intVal = parseInt(value);
+    return isNaN(intVal) ? value : intVal.toLocaleString() + "円";
+  }
+
+  async function loadData() {
+    const res = await fetch("./loto7.json");
+    data = await res.json();
+    renderTable(data);
+  }
+
+  function renderTable(filteredData) {
+    const tbody = document.querySelector("#resultTable tbody");
+    tbody.innerHTML = "";
+    filteredData.forEach(item => {
+      const nums = [item["第1数字"], item["第2数字"], item["第3数字"], item["第4数字"], item["第5数字"], item["第6数字"], item["第7数字"]].join("・");
+      const bonus = [item["BONUS数字1"], item["BONUS数字2"]].join("・");
+      const row = `
+        <tr>
+          <td>${item["開催回"]}</td><td>${item["日付"]}</td><td>${nums}</td><td>${bonus}</td><td>${item["特徴"] || ""}</td>
+          <td>${formatYen(item["1等賞金"])}</td><td>${item["1等口数"]}</td>
+          <td>${formatYen(item["2等賞金"])}</td><td>${item["2等口数"]}</td>
+          <td>${formatYen(item["3等賞金"])}</td><td>${item["3等口数"]}</td>
+          <td>${formatYen(item["4等賞金"])}</td><td>${item["4等口数"]}</td>
+          <td>${formatYen(item["5等賞金"])}</td><td>${item["5等口数"]}</td>
+          <td>${formatYen(item["6等賞金"])}</td><td>${item["6等口数"]}</td>
+          <td>${formatYen(item["キャリーオーバー"])}</td>
+        </tr>`;
+      tbody.insertAdjacentHTML("beforeend", row);
+    });
+  }
+
+  function filterResults() {
+    const fromRound = parseInt(document.getElementById("fromRound").value) || 1;
+    const toRound = parseInt(document.getElementById("toRound").value) || 9999;
+    const fromDate = document.getElementById("fromDate").value;
+    const toDate = document.getElementById("toDate").value;
+    const checked = Array.from(document.querySelectorAll(".feature:checked")).map(el => el.value);
+
+    const filtered = data.filter(item => {
+      const round = parseInt(item["開催回"]);
+      const date = item["日付"];
+      const inRound = round >= fromRound && round <= toRound;
+      const inDate = (!fromDate || date >= fromDate) && (!toDate || date <= toDate);
+      const hasFeature = checked.length === 0 || checked.every(f => item["特徴"]?.includes(f));
+      return inRound && inDate && hasFeature;
+    });
+
+    renderTable(filtered);
+  }
+
+  function scrollTableToTop() {
+    document.getElementById("scrollContainer").scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function scrollTableToBottom() {
+    const container = document.getElementById("scrollContainer");
+    container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    loadData();
+  });
+</script>
+
 </body>
 </html>
