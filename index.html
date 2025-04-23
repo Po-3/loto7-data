@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ロト7結果検索ツール</title>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ロト7結果検索ツール</title>
+<style>
     body {
       font-family: 'Helvetica Neue', sans-serif;
       padding: 20px;
@@ -110,65 +111,58 @@
 </style>
 </head>
 <body>
-
-  <nav style="margin-bottom: 16px;">
-    <a href="https://po-3.github.io/loto6-data/" style="margin-right: 12px;">🔗 ロト6</a>
-    <a href="https://po-3.github.io/miniloto-data/">🔗 ミニロト</a>
-  </nav>
-
-  <h1>ロト7結果検索ツール</h1>
-  <p>開催回・日付・抽選数字の特徴などで直感的に検索できます。</p>
-
-  <div class="filters">
-    <label>開催回 From: <input type="number" id="fromRound" min="1"></label>
-    <label>To: <input type="number" id="toRound" min="1"></label>
-    <label>開催日 From: <input type="date" id="fromDate"></label>
-    <label>To: <input type="date" id="toDate"></label>
-    
-    <div>
-      <label><input type="checkbox" class="feature" value="連番あり"> 連番あり</label>
-      <span class="info-icon" onclick="showPopup(event, '連続した数字（例：24・25など）を含む構成です。')">ⓘ</span>
-      <label><input type="checkbox" class="feature" value="奇数多め"> 奇数多め</label>
-      <span class="info-icon" onclick="showPopup(event, '奇数が5個以上含まれる構成です。')">ⓘ</span>
-      <label><input type="checkbox" class="feature" value="偶数多め"> 偶数多め</label>
-      <span class="info-icon" onclick="showPopup(event, '偶数が5個以上含まれる構成です。')">ⓘ</span>
-      <label><input type="checkbox" class="feature" value="下一桁かぶり"> 下一桁かぶり</label>
-      <span class="info-icon" onclick="showPopup(event, '同じ下一桁の数字が2個以上（例：11・21など）含まれる構成です。')">ⓘ</span>
-      <label><input type="checkbox" class="feature" value="合計小さめ"> 合計小さめ</label>
-      <span class="info-icon" onclick="showPopup(event, '7つの本数字の合計が160未満の回です。')">ⓘ</span>
-      <label><input type="checkbox" class="feature" value="合計大きめ"> 合計大きめ</label>
-      <span class="info-icon" onclick="showPopup(event, '7つの本数字の合計が200を超える回です。')">ⓘ</span>
-      <label><input type="checkbox" class="feature" value="10番台集中"> 10番台集中</label>
-      <span class="info-icon" onclick="showPopup(event, '10〜19の数字が3つ以上含まれる構成です。')">ⓘ</span>
-      <label><input type="checkbox" class="feature" value="30番台多め"> 30番台多め</label>
-      <span class="info-icon" onclick="showPopup(event, '30〜37の数字が3つ以上含まれる構成です。')">ⓘ</span>
-      <label><input type="checkbox" class="feature" value="高低ミックス"> 高低ミックス</label>
-      <span class="info-icon" onclick="showPopup(event, '10未満と30超の数字が両方含まれる構成です。')">ⓘ</span>
-      <label><input type="checkbox" class="feature" value="キャリーあり"> キャリーあり</label>
-      <span class="info-icon" onclick="showPopup(event, 'キャリーオーバーが発生していた回です。')">ⓘ</span>
-    </div>
-    <button onclick="filterResults()">🔍 検索</button>
-  </div>
-
-  <div class="scroll-container" id="scrollContainer">
-    <table id="resultTable">
-      <thead>
-        <tr>
-          <th>開催回</th><th>日付</th><th>本数字</th><th>ボーナス</th><th>特徴</th>
-          <th>1等賞金</th><th>1等口数</th><th>2等賞金</th><th>2等口数</th>
-          <th>3等賞金</th><th>3等口数</th><th>4等賞金</th><th>4等口数</th>
-          <th>5等賞金</th><th>5等口数</th><th>6等賞金</th><th>6等口数</th><th>キャリーオーバー</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-
-  <button class="scroll-button" id="scrollTopBtn" onclick="scrollTableToTop()">⬆ 最上段へ</button>
-  <button class="scroll-button" id="scrollBottomBtn" onclick="scrollTableToBottom()">⬇ 最下段へ</button>
-  
-  <div id="popupBox" class="popup" style="display:none; position:absolute;"></div>
-  <script>
+<nav style="margin-bottom: 16px;">
+<a href="https://po-3.github.io/loto6-data/" style="margin-right: 12px;">🔗 ロト6</a>
+<a href="https://po-3.github.io/miniloto-data/">🔗 ミニロト</a>
+</nav>
+<h1>ロト7結果検索ツール</h1>
+<p>開催回・日付・抽選数字の特徴などで直感的に検索できます。</p>
+<div class="filters">
+<label>開催回 From: <input id="fromRound" min="1" type="number"/></label>
+<label>To: <input id="toRound" min="1" type="number"/></label>
+<label>開催日 From: <input id="fromDate" type="date"/></label>
+<label>To: <input id="toDate" type="date"/></label>
+<div>
+<label><input class="feature" type="checkbox" value="連番あり"/> 連番あり</label>
+<span class="info-icon" onclick="showPopup(event, '連続した数字（例：24・25など）を含む構成です。')">ⓘ</span>
+<label><input class="feature" type="checkbox" value="奇数多め"/> 奇数多め</label>
+<span class="info-icon" onclick="showPopup(event, '奇数が5個以上含まれる構成です。')">ⓘ</span>
+<label><input class="feature" type="checkbox" value="偶数多め"/> 偶数多め</label>
+<span class="info-icon" onclick="showPopup(event, '偶数が5個以上含まれる構成です。')">ⓘ</span>
+<label><input class="feature" type="checkbox" value="下一桁かぶり"/> 下一桁かぶり</label>
+<span class="info-icon" onclick="showPopup(event, '同じ下一桁の数字が2個以上（例：11・21など）含まれる構成です。')">ⓘ</span>
+<label><input class="feature" type="checkbox" value="合計小さめ"/> 合計小さめ</label>
+<span class="info-icon" onclick="showPopup(event, '7つの本数字の合計が160未満の回です。')">ⓘ</span>
+<label><input class="feature" type="checkbox" value="合計大きめ"/> 合計大きめ</label>
+<span class="info-icon" onclick="showPopup(event, '7つの本数字の合計が200を超える回です。')">ⓘ</span>
+<label><input class="feature" type="checkbox" value="10番台集中"/> 10番台集中</label>
+<span class="info-icon" onclick="showPopup(event, '10〜19の数字が3つ以上含まれる構成です。')">ⓘ</span>
+<label><input class="feature" type="checkbox" value="30番台多め"/> 30番台多め</label>
+<span class="info-icon" onclick="showPopup(event, '30〜37の数字が3つ以上含まれる構成です。')">ⓘ</span>
+<label><input class="feature" type="checkbox" value="高低ミックス"/> 高低ミックス</label>
+<span class="info-icon" onclick="showPopup(event, '10未満と30超の数字が両方含まれる構成です。')">ⓘ</span>
+<label><input class="feature" type="checkbox" value="キャリーあり"/> キャリーあり</label>
+<span class="info-icon" onclick="showPopup(event, 'キャリーオーバーが発生していた回です。')">ⓘ</span>
+</div>
+<button onclick="filterResults()">🔍 検索</button>
+</div>
+<div class="scroll-container" id="scrollContainer">
+<table id="resultTable">
+<thead>
+<tr>
+<th>開催回</th><th>日付</th><th>本数字</th><th>ボーナス</th><th>特徴</th>
+<th>1等賞金</th><th>1等口数</th><th>2等賞金</th><th>2等口数</th>
+<th>3等賞金</th><th>3等口数</th><th>4等賞金</th><th>4等口数</th>
+<th>5等賞金</th><th>5等口数</th><th>6等賞金</th><th>6等口数</th><th>キャリーオーバー</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</div>
+<button class="scroll-button" id="scrollTopBtn" onclick="scrollTableToTop()">⬆ 最上段へ</button>
+<button class="scroll-button" id="scrollBottomBtn" onclick="scrollTableToBottom()">⬇ 最下段へ</button>
+<div class="popup" id="popupBox" style="display:none; position:absolute;"></div>
+<script>
     function showPopup(event, text) {
       const popup = document.getElementById("popupBox");
       popup.textContent = text;
@@ -187,8 +181,6 @@
       }
     });
   </script>
-
-
 <script>
   let data = [];
 
@@ -258,6 +250,5 @@
     loadData();
   });
 </script>
-
 </body>
 </html>
