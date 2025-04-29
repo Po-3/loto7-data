@@ -340,13 +340,34 @@ function sortTable(columnIndex) {
   const isAsc = !sortDirection[columnIndex];
   sortDirection[columnIndex] = isAsc;
 
+function sortTable(columnIndex) {
+  const table = document.getElementById("resultTable");
+  const tbody = table.querySelector("tbody");
+  const rows = Array.from(tbody.querySelectorAll("tr"));
+  const isAsc = !sortDirection[columnIndex];
+  sortDirection[columnIndex] = isAsc;
+
   rows.sort((a, b) => {
-    const aText = a.children[columnIndex].textContent.trim().replace(/[^\d.-]/g, "");
-    const bText = b.children[columnIndex].textContent.trim().replace(/[^\d.-]/g, "");
-    const aVal = isNaN(aText) ? aText : parseFloat(aText);
-    const bVal = isNaN(bText) ? bText : parseFloat(bText);
-    return isAsc ? (aVal > bVal ? 1 : -1) : (aVal < bVal ? 1 : -1);
+    let aText = a.children[columnIndex].textContent.trim();
+    let bText = b.children[columnIndex].textContent.trim();
+
+    // 🔽 ここがポイント：「・」区切りがある列（ボーナスなど）の1番目の数値を使って比較
+    const extractFirstNumber = str => {
+      const match = str.match(/\d+/);
+      return match ? parseInt(match[0], 10) : 0;
+    };
+
+    // 🔄 修正対象：index 3 = ボーナス列、index 5 以降 = 賞金列など数値として比較すべき列
+    const aVal = (columnIndex === 3 || columnIndex === 0 || columnIndex >= 5) ? extractFirstNumber(aText) : aText;
+    const bVal = (columnIndex === 3 || columnIndex === 0 || columnIndex >= 5) ? extractFirstNumber(bText) : bText;
+
+    return isAsc
+      ? (aVal > bVal ? 1 : -1)
+      : (aVal < bVal ? 1 : -1);
   });
+
+  rows.forEach(row => tbody.appendChild(row));
+}
 
   rows.forEach(row => tbody.appendChild(row));
 }
