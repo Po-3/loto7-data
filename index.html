@@ -223,25 +223,20 @@ function featureQuickSearch(feature) {
     return isNaN(intVal) ? value : intVal.toLocaleString() + "円";
   }
 
-  async function loadData() {
-    const res = await fetch("./loto7.json");
-    data = await res.json();
+async function loadData() {
+  const response = await fetch("loto7.json");
+  const data = await response.json();
 
- // データを開催回の降順で並べ替え
-data.sort((a, b) => Number(b["開催回"]) - Number(a["開催回"]));
+  // データを開催回の降順で並べ替え
+  data.sort((a, b) => Number(b["開催回"]) - Number(a["開催回"]));
 
-// 最新のデータ更新日を取得
-const dates = [...data.map(item => item["日付"])].sort();  // ★ここ！スプレッド演算子[...]でコピー
-const latest = dates[dates.length - 1];
-document.getElementById("lastUpdated").innerHTML = `データ更新日：${latest} ｜ツールVer：<a href="https://www.kujitonari.net/loto_search_tool" target="_blank" style="color:#d94f4f;text-decoration:underline;">1.01</a>`;
+  // 最新のデータ更新日を取得
+  const dates = [...data.map(item => item["日付"])].sort();
+  const latest = dates[dates.length - 1];
+  document.getElementById("lastUpdated").innerHTML = `データ更新日：${latest} ｜ツールVer：<a href="https://www.kujitonari.net/loto_search_tool" target="_blank" style="color:#d94f4f;text-decoration:underline;">1.01</a>`;
 
-    renderTable(data);
-
-      const dates = data.map(item => item["日付"]).sort();
-      const latest = dates[dates.length - 1];
-      document.getElementById("lastUpdated").innerHTML = `データ更新日：${latest} ｜ツールVer：<a href="https://www.kujitonari.net/loto_search_tool" target="_blank" style="color:#d94f4f;text-decoration:underline;">1.01</a>`;
-
-  }
+  renderTable(data);
+}
 
   function renderTable(filteredData) {
     const tbody = document.querySelector("#resultTable tbody");
