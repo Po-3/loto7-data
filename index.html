@@ -226,19 +226,24 @@ async function loadData() {
   try {
     const res = await fetch("./loto7.json");
     data = await res.json();
-
-    // データを開催回の降順で並べ替え
+    
+    // データを開催回降順に並べ替え
     data.sort((a, b) => Number(b["開催回"]) - Number(a["開催回"]));
 
-    // 最新のデータ更新日を取得
+    // データ更新日を取得
     const latestDate = new Date(Math.max(...data.map(item => new Date(item["日付"]))));
-    const latestDateString = latestDate.toLocaleDateString("ja-JP"); // 日本のローカル日付形式に変換
+    const latestDateString = latestDate.toLocaleDateString("ja-JP");
 
-    document.getElementById("lastUpdated").innerHTML = `データ更新日：${latestDateString} ｜ツールVer：<a href="https://www.kujitonari.net/loto_search_tool" target="_blank" style="color:#d94f4f;text-decoration:underline;">1.11.1</a>`;
+    document.getElementById("lastUpdated").innerHTML = `データ更新日：${latestDateString} ｜ツールVer：...`;
 
-    renderTable(data);
+    renderTable(data); // ← ここで呼ぶだけ（中に定義しない！）
+  } catch (error) {
+    console.error("データ読み込みエラー:", error);
+  }
+}
 
-  function renderTable(filteredData) {
+// ★ここでloadDataの外にrenderTable関数を独立して書く！
+function renderTable(filteredData) {
     const tbody = document.querySelector("#resultTable tbody");
     tbody.innerHTML = "";
     filteredData.forEach(item => {
