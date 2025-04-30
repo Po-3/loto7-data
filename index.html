@@ -362,9 +362,6 @@ function sortTable(columnIndex) {
   rows.forEach(row => tbody.appendChild(row));
 }
 
-  rows.forEach(row => tbody.appendChild(row));
-}
-
 // ソート用クリックイベント登録（loadData完了後に実行されるようにする）
 function attachSortEvents() {
   const headers = document.querySelectorAll("#resultTable th");
