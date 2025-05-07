@@ -282,29 +282,22 @@ function renderTable(filteredData) {
     tbody.insertAdjacentHTML("beforeend", row);
   });
 }
+
 function filterResults() {
   const fromRound = parseInt(document.getElementById("fromRound").value) || 1;
   const toRound = parseInt(document.getElementById("toRound").value) || 9999;
-const sumFrom = parseInt(document.getElementById("fromSum").value);
-const sumTo = parseInt(document.getElementById("toSum").value);
   const fromDate = document.getElementById("fromDate").value;
   const toDate = document.getElementById("toDate").value;
   const checked = Array.from(document.querySelectorAll(".feature:checked")).map(el => el.value);
   const oddEvenPattern = document.getElementById("oddEvenPattern").value;
+  const fromSum = parseInt(document.getElementById("fromSum").value);
+  const toSum = parseInt(document.getElementById("toSum").value);
   const includeNumbers = document.getElementById("includeNumbers").value.split(",").map(s => s.trim()).filter(s => s !== "").map(Number);
   const excludeNumbers = document.getElementById("excludeNumbers").value.split(",").map(s => s.trim()).filter(s => s !== "").map(Number);
 
   const filtered = data.filter(item => {
     const round = parseInt(item["開催回"]);
     const date = item["日付"];
-    const nums = [
-      item["第1数字"], item["第2数字"], item["第3数字"],
-      item["第4数字"], item["第5数字"], item["第6数字"], item["第7数字"]
-    ].map(n => Number(n));
-
-    const oddCount = nums.filter(n => n % 2 === 1).length;
-    const evenCount = 7 - oddCount;
-    const patternMatch = !oddEvenPattern || oddEvenPattern === `${oddCount}-${evenCount}`;
 
     const formatToDateStr = d => new Date(d).toISOString().split("T")[0];
     const inDate = (!fromDate || formatToDateStr(date) >= fromDate) &&
@@ -313,9 +306,18 @@ const sumTo = parseInt(document.getElementById("toSum").value);
     const inRound = round >= fromRound && round <= toRound;
     const hasFeature = checked.length === 0 || checked.every(f => (item["特徴"]?.split("・") || []).includes(f));
 
+    const nums = [
+      item["第1数字"], item["第2数字"], item["第3数字"],
+      item["第4数字"], item["第5数字"], item["第6数字"], item["第7数字"]
+    ].map(n => Number(n));
+
     const sum = nums.reduce((a, b) => a + b, 0);
-    const inSumRange = (isNaN(sumFrom) || sum >= sumFrom) &&
-                       (isNaN(sumTo) || sum <= sumTo);
+    const inSumRange = (isNaN(fromSum) || sum >= fromSum) &&
+                       (isNaN(toSum) || sum <= toSum);
+
+    const oddCount = nums.filter(n => n % 2 === 1).length;
+    const evenCount = 7 - oddCount;
+    const patternMatch = !oddEvenPattern || oddEvenPattern === `${oddCount}-${evenCount}`;
 
     const includeMatch = includeNumbers.length === 0 || includeNumbers.every(n => nums.includes(n));
     const excludeMatch = excludeNumbers.length === 0 || excludeNumbers.every(n => !nums.includes(n));
@@ -353,8 +355,8 @@ const sumTo = parseInt(document.getElementById("toSum").value);
     document.getElementById("resultCount").textContent = "";
     document.getElementById("includeNumbers").value = "";
     document.getElementById("excludeNumbers").value = "";
-document.getElementById("sumFrom").value = "";
-document.getElementById("sumTo").value = "";
+document.getElementById("fromSum").value = "";
+document.getElementById("toSum").value = "";
 document.getElementById("oddEvenPattern").value = "";
     renderTable(data);
 
