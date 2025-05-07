@@ -143,33 +143,49 @@
 <nav style="margin-bottom: 16px;">
 <a href="https://po-3.github.io/loto6-data/" style="margin-right: 12px;">🔗 ロト6</a>
 <a href="https://po-3.github.io/miniloto-data/">🔗 ミニロト</a>
-</nav>
-<p>開催回・日付・抽選数字の特徴などで直感的に検索できます。</p>
+<!-- ✅ 修正済み：検索＆リセットボタンをfilters内右端に配置 -->
 <div class="filters">
-<label>開催回 From: <input id="fromRound" min="1" type="number"/></label>
-<label>To: <input id="toRound" min="1" type="number"/></label>
-<label>開催日 From: <input id="fromDate" type="date"/></label>
-<label>To: <input id="toDate" type="date"/></label><label>含む数字: <input id="includeNumbers" placeholder="例: 3,17,28" style="margin-left: 4px;" type="text"/></label><label>除く数字: <input id="excludeNumbers" placeholder="例: 1,12" style="margin-left: 4px;" type="text"/></label>
-<div style="display: flex; flex-wrap: wrap; gap: 12px;">
-    <div class="filter-block"><label><input class="feature" type="checkbox" value="連番あり"/> 連番あり</label><span class="info-icon" onclick="showPopup(event, '連続した数字（例：24・25など）を含む構成です。')">ⓘ</span></div>
-    <div class="filter-block"><label><input class="feature" type="checkbox" value="奇数多め"/> 奇数多め</label><span class="info-icon" onclick="showPopup(event, '奇数が5個以上含まれる構成です。')">ⓘ</span></div>
-    <div class="filter-block"><label><input class="feature" type="checkbox" value="偶数多め"/> 偶数多め</label><span class="info-icon" onclick="showPopup(event, '偶数が5個以上含まれる構成です。')">ⓘ</span></div>
-    <div class="filter-block"><label><input class="feature" type="checkbox" value="下一桁かぶり"/> 下一桁かぶり</label><span class="info-icon" onclick="showPopup(event, '同じ下一桁の数字が2個以上（例：11・21など）含まれる構成です。')">ⓘ</span></div>
-    <div class="filter-block"><label><input class="feature" type="checkbox" value="合計小さめ"/> 合計小さめ</label><span class="info-icon" onclick="showPopup(event, '7つの本数字の合計が160未満の回です。')">ⓘ</span></div>
-    <div class="filter-block"><label><input class="feature" type="checkbox" value="合計大きめ"/> 合計大きめ</label><span class="info-icon" onclick="showPopup(event, '7つの本数字の合計が160以上の回です。')">ⓘ</span></div>
-    <div class="filter-block"><label><input class="feature" type="checkbox" value="10番台集中"/> 10番台集中</label><span class="info-icon" onclick="showPopup(event, '10〜19の数字が3つ以上含まれる構成です。')">ⓘ</span></div>
-    <div class="filter-block"><label><input class="feature" type="checkbox" value="30番台多め"/> 30番台多め</label><span class="info-icon" onclick="showPopup(event, '30〜37の数字が3つ以上含まれる構成です。')">ⓘ</span></div>
-    <div class="filter-block"><label><input class="feature" type="checkbox" value="高低ミックス"/> 高低ミックス</label><span class="info-icon" onclick="showPopup(event, '10未満と30超の数字が両方含まれる構成です。')">ⓘ</span></div>
-    <div class="filter-block"><label><input class="feature" type="checkbox" value="キャリーあり"/> キャリーあり</label><span class="info-icon" onclick="showPopup(event, 'キャリーオーバーが発生していた回です。')">ⓘ</span></div>
+  <!-- フィルター項目（例：開催回・日付など） -->
+  <label>開催回 From: <input id="fromRound" min="1" type="number"/></label>
+  <label>To: <input id="toRound" min="1" type="number"/></label>
+  <label>開催日 From: <input id="fromDate" type="date"/></label>
+  <label>To: <input id="toDate" type="date"/></label>
+  <label>含む数字: <input id="includeNumbers" placeholder="例: 3,17,28" style="margin-left: 4px;" type="text"/></label>
+  <label>除く数字: <input id="excludeNumbers" placeholder="例: 1,12" style="margin-left: 4px;" type="text"/></label>
 
- <label>合計値:
-  <input type="number" id="sumMin" placeholder="最小" style="width:60px;">
-  〜
-  <input type="number" id="sumMax" placeholder="最大" style="width:60px;">
-</label>
-<span class="info-icon break-after-mobile" onclick="showPopup(event, '6つの本数字の合計値で絞り込みます')">ⓘ</span>
-<div class="filter-block" style="margin-top: 12px;">
-  <label>構成タイプ:
+  <!-- チェックボックスとボタンを左右に並べる -->
+  <div style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 10px;">
+    <!-- ✅ 左：チェックボックス列 -->
+    <div style="display: flex; flex-wrap: wrap; gap: 12px;">
+      <div class="filter-block"><label><input class="feature" type="checkbox" value="連番あり"/> 連番あり</label></div>
+      <div class="filter-block"><label><input class="feature" type="checkbox" value="奇数多め"/> 奇数多め</label></div>
+      <div class="filter-block"><label><input class="feature" type="checkbox" value="偶数多め"/> 偶数多め</label></div>
+      <div class="filter-block"><label><input class="feature" type="checkbox" value="下一桁かぶり"/> 下一桁かぶり</label></div>
+      <div class="filter-block"><label><input class="feature" type="checkbox" value="合計小さめ"/> 合計小さめ</label></div>
+      <div class="filter-block"><label><input class="feature" type="checkbox" value="合計大きめ"/> 合計大きめ</label></div>
+      <div class="filter-block"><label><input class="feature" type="checkbox" value="10番台集中"/> 10番台集中</label></div>
+      <div class="filter-block"><label><input class="feature" type="checkbox" value="30番台多め"/> 30番台多め</label></div>
+      <div class="filter-block"><label><input class="feature" type="checkbox" value="高低ミックス"/> 高低ミックス</label></div>
+      <div class="filter-block"><label><input class="feature" type="checkbox" value="キャリーあり"/> キャリーあり</label></div>
+    </div>
+
+    <!-- ✅ 右：検索ボタンとリセットボタン -->
+    <div style="display: flex; gap: 10px; align-items: flex-start;">
+      <button class="filters-button" onclick="filterResults()">
+        <i class="fas fa-magnifying-glass"></i> 検索
+      </button>
+      <button class="filters-button" onclick="resetFilters()">
+        <i class="fas fa-rotate-right"></i> リセット
+      </button>
+    </div>
+  </div>
+
+  <!-- その他の条件（合計値・構成タイプ） -->
+  <label style="margin-top: 12px; display: block;">合計値:
+    <input type="number" id="sumMin" placeholder="最小" style="width:60px;"> ～
+    <input type="number" id="sumMax" placeholder="最大" style="width:60px;">
+  </label>
+  <label style="margin-top: 6px; display: block;">構成タイプ:
     <select id="patternType">
       <option value="">（指定なし）</option>
       <option value="7-0">奇数7：偶数0</option>
@@ -182,16 +198,6 @@
       <option value="0-7">奇数0：偶数7</option>
     </select>
   </label>
-  <span class="info-icon" onclick="showPopup(event, '選んだ奇数・偶数の比率に一致する回だけを表示します')">ⓘ</span>
-</div>
-</div>
-<div style="margin: 12px 0; display: flex; gap: 10px; flex-wrap: wrap;">
-  <button class="filters-button" onclick="filterResults()">
-    <i class="fas fa-magnifying-glass"></i> 検索
-  </button>
-  <button class="filters-button" onclick="resetFilters()">
-    <i class="fas fa-rotate-right"></i> リセット
-  </button>
 </div>
 <div class="scroll-container" id="scrollContainer">
 <table id="resultTable">
