@@ -285,8 +285,8 @@ function renderTable(filteredData) {
 function filterResults() {
   const fromRound = parseInt(document.getElementById("fromRound").value) || 1;
   const toRound = parseInt(document.getElementById("toRound").value) || 9999;
-  const sumFrom = parseInt(document.getElementById("sumFrom").value);
-  const sumTo = parseInt(document.getElementById("sumTo").value);
+const sumFrom = parseInt(document.getElementById("fromSum").value);
+const sumTo = parseInt(document.getElementById("toSum").value);
   const fromDate = document.getElementById("fromDate").value;
   const toDate = document.getElementById("toDate").value;
   const checked = Array.from(document.querySelectorAll(".feature:checked")).map(el => el.value);
