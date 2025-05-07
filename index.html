@@ -166,6 +166,27 @@
 <span class="info-icon" onclick="showPopup(event, '10未満と30超の数字が両方含まれる構成です。')">ⓘ</span>
 <label><input class="feature" type="checkbox" value="キャリーあり"/> キャリーあり</label>
 <span class="info-icon" onclick="showPopup(event, 'キャリーオーバーが発生していた回です。')">ⓘ</span>
+<label>合計値:
+  <input type="number" id="sumMin" placeholder="最小" style="width:60px;">
+  〜
+  <input type="number" id="sumMax" placeholder="最大" style="width:60px;">
+</label>
+<span class="info-icon" onclick="showPopup(event, '7つの本数字の合計値で絞り込みます')">ⓘ</span>
+
+<label>構成タイプ:
+  <select id="patternType">
+    <option value="">（指定なし）</option>
+    <option value="7-0">奇数7：偶数0</option>
+    <option value="6-1">奇数6：偶数1</option>
+    <option value="5-2">奇数5：偶数2</option>
+    <option value="4-3">奇数4：偶数3</option>
+    <option value="3-4">奇数3：偶数4</option>
+    <option value="2-5">奇数2：偶数5</option>
+    <option value="1-6">奇数1：偶数6</option>
+    <option value="0-7">奇数0：偶数7</option>
+  </select>
+</label>
+<span class="info-icon" onclick="showPopup(event, '選んだ奇数・偶数の比率に一致する回だけを表示します')">ⓘ</span>
 </div>
 <button onclick="filterResults()">
   <i class="fas fa-magnifying-glass"></i> 検索
@@ -240,7 +261,7 @@ async function loadData() {
     const latestDate = new Date(Math.max(...data.map(item => new Date(item["日付"]))));
     const latestDateString = latestDate.toLocaleDateString("ja-JP");
 
-    document.getElementById("lastUpdated").innerHTML = `データ更新日：${latestDateString} ｜ツールVer：<a href="https://www.kujitonari.net/loto_search_tool" target="_blank" style="color:#d94f4f;text-decoration:underline;">1.11.2</a>`;
+    document.getElementById("lastUpdated").innerHTML = `データ更新日：${latestDateString} ｜ツールVer：<a href="https://www.kujitonari.net/loto_search_tool" target="_blank" style="color:#d94f4f;text-decoration:underline;">1.11.3</a>`;
 
     renderTable(data); // ← ここで呼ぶだけ（中に定義しない！）
   } catch (error) {
@@ -270,36 +291,45 @@ function renderTable(filteredData) {
     });
   }
 
-  function filterResults() {
-    const fromRound = parseInt(document.getElementById("fromRound").value) || 1;
-    const toRound = parseInt(document.getElementById("toRound").value) || 9999;
-    const fromDate = document.getElementById("fromDate").value;
-    const toDate = document.getElementById("toDate").value;
-    const checked = Array.from(document.querySelectorAll(".feature:checked")).map(el => el.value);
+function filterResults() {
+  const fromRound = parseInt(document.getElementById("fromRound").value) || 1;
+  const toRound = parseInt(document.getElementById("toRound").value) || 9999;
+  const fromDate = document.getElementById("fromDate").value;
+  const toDate = document.getElementById("toDate").value;
+  const checked = Array.from(document.querySelectorAll(".feature:checked")).map(el => el.value);
+  const includeNumbers = document.getElementById("includeNumbers").value.split(",").map(s => s.trim()).filter(s => s !== "").map(Number);
+  const excludeNumbers = document.getElementById("excludeNumbers").value.split(",").map(s => s.trim()).filter(s => s !== "").map(Number);
+  const sumMin = parseInt(document.getElementById("sumMin")?.value);
+  const sumMax = parseInt(document.getElementById("sumMax")?.value);
+  const patternType = document.getElementById("patternType")?.value;
 
-    
-    const includeNumbers = document.getElementById("includeNumbers").value.split(",").map(s => s.trim()).filter(s => s !== "").map(Number);
-    const excludeNumbers = document.getElementById("excludeNumbers").value.split(",").map(s => s.trim()).filter(s => s !== "").map(Number);
-    const filtered = data.filter(item => {
-      const round = parseInt(item["開催回"]);
-      const date = item["日付"];
-      const inRound = round >= fromRound && round <= toRound;
-      const inDate = (!fromDate || date >= fromDate) && (!toDate || date <= toDate);
-      const hasFeature = checked.length === 0 || checked.every(f => (item["特徴"]?.split("・") || []).includes(f));
-      
-    const nums = [item["第1数字"], item["第2数字"], item["第3数字"], item["第4数字"], item["第5数字"], item["第6数字"], item["第7数字"]].map(n => Number(n));
+  const filtered = data.filter(item => {
+    const round = parseInt(item["開催回"]);
+    const date = item["日付"];
+    const nums = [item["第1数字"], item["第2数字"], item["第3数字"], item["第4数字"], item["第5数字"], item["第6数字"], item["第7数字"]].map(Number);
+    const sum = nums.reduce((a, b) => a + b, 0);
+    const oddCount = nums.filter(n => n % 2 === 1).length;
+    const evenCount = nums.length - oddCount;
+
+    const inRound = round >= fromRound && round <= toRound;
+    const inDate = (!fromDate || date >= fromDate) && (!toDate || date <= toDate);
     const includeMatch = includeNumbers.length === 0 || includeNumbers.every(n => nums.includes(n));
     const excludeMatch = excludeNumbers.length === 0 || excludeNumbers.every(n => !nums.includes(n));
-    return inRound && inDate && hasFeature && includeMatch && excludeMatch;
-    
-    });
+    const inSum = (!sumMin || sum >= sumMin) && (!sumMax || sum <= sumMax);
+    const patternMatch = !patternType || patternType === `${oddCount}-${evenCount}`;
+    const hasFeature = checked.length === 0 || checked.every(f => (item["特徴"]?.split("・") || []).includes(f));
 
-    renderTable(filtered);
-    document.getElementById("resultCount").textContent = `検索結果：${filtered.length} 件（条件：` +
+    return inRound && inDate && hasFeature && includeMatch && excludeMatch && inSum && patternMatch;
+  });
+
+  renderTable(filtered);
+  document.getElementById("resultCount").textContent = `検索結果：${filtered.length} 件（条件：` +
     (fromRound !== 1 || toRound !== 9999 ? `開催回 ${fromRound}〜${toRound} ` : "") +
     (fromDate || toDate ? `開催日 ${fromDate || '未指定'}〜${toDate || '未指定'} ` : "") +
+    (sumMin || sumMax ? `合計値 ${sumMin || '未指定'}〜${sumMax || '未指定'} ` : "") +
+    (patternType ? `構成タイプ ${patternType} ` : "") +
     (checked.length ? `特徴：` + checked.join("・") : "全件") + `)`;
-  }
+}
 
   function scrollTableToTop() {
     document.getElementById("scrollContainer").scrollTo({ top: 0, behavior: "smooth" });
