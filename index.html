@@ -93,21 +93,17 @@
     }
 
 
-.filters-button {
-  background-color: #ff8888;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  font-family: "Helvetica Neue", sans-serif;
-  border: none;
-  border-radius: 12px;
-  padding: 10px 24px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+    button {
+    background: #ff8888;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: "Helvetica Neue", sans-serif;
+    cursor: pointer;
+  }
 
 
     td:nth-child(5) {
@@ -159,10 +155,11 @@
 <span class="info-icon" onclick="showPopup(event, 'キャリーオーバーが発生していた回です。')">ⓘ</span>
 </div>
 </div>
-<button class="filters-button" onclick="filterResults()">
+<button onclick="filterResults()">
   <i class="fas fa-magnifying-glass"></i> 検索
 </button>
-<button class="filters-button" onclick="resetFilters()" style="margin-left: 10px;">
+
+<button onclick="resetFilters()" style="margin-left: 10px;">
   <i class="fas fa-rotate-right"></i> リセット
 </button>
 <p id="resultCount" style="margin-top: 10px; font-weight: bold;"></p>
@@ -231,7 +228,7 @@ async function loadData() {
     const latestDate = new Date(Math.max(...data.map(item => new Date(item["日付"]))));
     const latestDateString = latestDate.toLocaleDateString("ja-JP");
 
-    document.getElementById("lastUpdated").innerHTML = `データ更新日：${latestDateString} ｜ツールVer：<a href="https://www.kujitonari.net/loto_search_tool" target="_blank" style="color:#d94f4f;text-decoration:underline;">1.11.3</a>`;
+    document.getElementById("lastUpdated").innerHTML = `データ更新日：${latestDateString} ｜ツールVer：<a href="https://www.kujitonari.net/loto_search_tool" target="_blank" style="color:#d94f4f;text-decoration:underline;">1.11.2</a>`;
 
     renderTable(data); // ← ここで呼ぶだけ（中に定義しない！）
   } catch (error) {
