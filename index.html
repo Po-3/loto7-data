@@ -147,31 +147,38 @@
 <label>開催日 From: <input id="fromDate" type="date"/></label>
 <label>To: <input id="toDate" type="date"/></label><label>含む数字: <input id="includeNumbers" placeholder="例: 3,17,28" style="margin-left: 4px;" type="text"/></label><label>除く数字: <input id="excludeNumbers" placeholder="例: 1,12" style="margin-left: 4px;" type="text"/></label>
 <div style="display: flex; flex-wrap: wrap; gap: 12px;">
-  <div class="filter-block"><label><input class="feature" type="checkbox" value="連番あり"/> 連番あり</label><span class="info-icon" onclick="showPopup(event, '連続した数字（例：24・25など）を含む構成です。')">ⓘ</span></div>
-  <div class="filter-block"><label><input class="feature" type="checkbox" value="奇数多め"/> 奇数多め</label><span class="info-icon" onclick="showPopup(event, '奇数が5個以上含まれる構成です。')">ⓘ</span></div>
-  <div class="filter-block"><label><input class="feature" type="checkbox" value="偶数多め"/> 偶数多め</label><span class="info-icon" onclick="showPopup(event, '偶数が5個以上含まれる構成です。')">ⓘ</span></div>
-  <div class="filter-block"><label><input class="feature" type="checkbox" value="下一桁かぶり"/> 下一桁かぶり</label><span class="info-icon" onclick="showPopup(event, '同じ下一桁の数字が2個以上（例：11・21など）含まれる構成です。')">ⓘ</span></div>
-  <div class="filter-block"><label><input class="feature" type="checkbox" value="合計小さめ"/> 合計小さめ</label><span class="info-icon" onclick="showPopup(event, '7つの本数字の合計が160未満の回です。')">ⓘ</span></div>
-  <div class="filter-block"><label><input class="feature" type="checkbox" value="合計大きめ"/> 合計大きめ</label><span class="info-icon" onclick="showPopup(event, '7つの本数字の合計が160以上の回です。')">ⓘ</span></div>
-  <div class="filter-block"><label><input class="feature" type="checkbox" value="10番台集中"/> 10番台集中</label><span class="info-icon" onclick="showPopup(event, '10〜19の数字が3つ以上含まれる構成です。')">ⓘ</span></div>
-  <div class="filter-block"><label><input class="feature" type="checkbox" value="30番台多め"/> 30番台多め</label><span class="info-icon" onclick="showPopup(event, '30〜37の数字が3つ以上含まれる構成です。')">ⓘ</span></div>
-  <div class="filter-block"><label><input class="feature" type="checkbox" value="高低ミックス"/> 高低ミックス</label><span class="info-icon" onclick="showPopup(event, '10未満と30超の数字が両方含まれる構成です。')">ⓘ</span></div>
-  <div class="filter-block"><label><input class="feature" type="checkbox" value="キャリーあり"/> キャリーあり</label><span class="info-icon" onclick="showPopup(event, 'キャリーオーバーが発生していた回です。')">ⓘ</span></div>
-  <div class="filter-block"><label>合計値: <input type="number" id="sumMin" placeholder="最小" style="width:60px;"> 〜 <input type="number" id="sumMax" placeholder="最大" style="width:60px;"></label><span class="info-icon" onclick="showPopup(event, '7つの本数字の合計値で絞り込みます')">ⓘ</span></div>
-</div>
-<!-- ここで特徴フィルター群が終了 -->
-</div> <!-- flex: wrap -->
+    <div class="filter-block"><label><input class="feature" type="checkbox" value="連番あり"/> 連番あり</label><span class="info-icon" onclick="showPopup(event, '連続した数字（例：24・25など）を含む構成です。')">ⓘ</span></div>
+    <div class="filter-block"><label><input class="feature" type="checkbox" value="奇数多め"/> 奇数多め</label><span class="info-icon" onclick="showPopup(event, '奇数が5個以上含まれる構成です。')">ⓘ</span></div>
+    <div class="filter-block"><label><input class="feature" type="checkbox" value="偶数多め"/> 偶数多め</label><span class="info-icon" onclick="showPopup(event, '偶数が5個以上含まれる構成です。')">ⓘ</span></div>
+    <div class="filter-block"><label><input class="feature" type="checkbox" value="下一桁かぶり"/> 下一桁かぶり</label><span class="info-icon" onclick="showPopup(event, '同じ下一桁の数字が2個以上（例：11・21など）含まれる構成です。')">ⓘ</span></div>
+    <div class="filter-block"><label><input class="feature" type="checkbox" value="合計小さめ"/> 合計小さめ</label><span class="info-icon" onclick="showPopup(event, '7つの本数字の合計が160未満の回です。')">ⓘ</span></div>
+    <div class="filter-block"><label><input class="feature" type="checkbox" value="合計大きめ"/> 合計大きめ</label><span class="info-icon" onclick="showPopup(event, '7つの本数字の合計が160以上の回です。')">ⓘ</span></div>
+    <div class="filter-block"><label><input class="feature" type="checkbox" value="10番台集中"/> 10番台集中</label><span class="info-icon" onclick="showPopup(event, '10〜19の数字が3つ以上含まれる構成です。')">ⓘ</span></div>
+    <div class="filter-block"><label><input class="feature" type="checkbox" value="30番台多め"/> 30番台多め</label><span class="info-icon" onclick="showPopup(event, '30〜37の数字が3つ以上含まれる構成です。')">ⓘ</span></div>
+    <div class="filter-block"><label><input class="feature" type="checkbox" value="高低ミックス"/> 高低ミックス</label><span class="info-icon" onclick="showPopup(event, '10未満と30超の数字が両方含まれる構成です。')">ⓘ</span></div>
+    <div class="filter-block"><label><input class="feature" type="checkbox" value="キャリーあり"/> キャリーあり</label><span class="info-icon" onclick="showPopup(event, 'キャリーオーバーが発生していた回です。')">ⓘ</span></div>
+  </div>
+ <label>合計値:
+  <input type="number" id="sumMin" placeholder="最小" style="width:60px;">
+  〜
+  <input type="number" id="sumMax" placeholder="最大" style="width:60px;">
+</label>
+<span class="info-icon" onclick="showPopup(event, '6つの本数字の合計値で絞り込みます')">ⓘ</span>
 
-<!-- ここから構成タイプを別ブロックで表示 -->
-<div class="filter-block" style="margin-top: 12px;">
-  <label>構成タイプ:
-    <select id="patternType">
+<label>構成タイプ:
+  <select id="patternType">
       <option value="">（指定なし）</option>
       <option value="7-0">奇数7：偶数0</option>
-      ...
-    </select>
-  </label>
-  <span class="info-icon" onclick="showPopup(event, '選んだ奇数・偶数の比率に一致する回だけを表示します')">ⓘ</span>
+      <option value="6-1">奇数6：偶数1</option>
+      <option value="5-2">奇数5：偶数2</option>
+      <option value="4-3">奇数4：偶数3</option>
+      <option value="3-4">奇数3：偶数4</option>
+      <option value="2-5">奇数2：偶数5</option>
+      <option value="1-6">奇数1：偶数6</option>
+      <option value="0-7">奇数0：偶数7</option>
+  </select>
+</label>
+<span class="info-icon" onclick="showPopup(event, '選んだ奇数・偶数の比率に一致する回だけを表示します')">ⓘ</span>
 </div>
 
 <!-- ここから検索ボタンたち -->
