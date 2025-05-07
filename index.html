@@ -127,6 +127,12 @@
   td:nth-child(5) {
     font-size: 10px !important;
   }
+
+  .break-after-mobile::after {
+    content: "";
+    display: block;
+  }
+
 }
 
 </style>
@@ -161,11 +167,10 @@
   〜
   <input type="number" id="sumMax" placeholder="最大" style="width:60px;">
 </label>
-<span class="info-icon" onclick="showPopup(event, '6つの本数字の合計値で絞り込みます')">ⓘ</span>
-<div class="filter-block" style="display: flex; flex-direction: column;">
-  <label style="margin-top: 4px;">
-    構成タイプ:
-    <select id="patternType" style="margin-left: 4px;">
+<span class="info-icon break-after-mobile" onclick="showPopup(event, '6つの本数字の合計値で絞り込みます')">ⓘ</span>
+<div class="filter-block" style="margin-top: 12px;">
+  <label>構成タイプ:
+    <select id="patternType">
       <option value="">（指定なし）</option>
       <option value="7-0">奇数7：偶数0</option>
       <option value="6-1">奇数6：偶数1</option>
@@ -178,7 +183,6 @@
     </select>
   </label>
   <span class="info-icon" onclick="showPopup(event, '選んだ奇数・偶数の比率に一致する回だけを表示します')">ⓘ</span>
-</div>
 </div>
 
 <!-- ここから検索ボタンたち -->
