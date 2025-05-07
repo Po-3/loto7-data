@@ -321,8 +321,8 @@ function filterResults() {
 
 let sumText = "";
 if (!isNaN(fromSum) || !isNaN(toSum)) {
-  const fromVal = isNaN(fromSum) ? "?" : fromSum;
-  const toVal = isNaN(toSum) ? "?" : toSum;
+  const fromVal = isNaN(fromSum) ? 28 : fromSum;  // ロト7最小合計値
+  const toVal = isNaN(toSum) ? 273 : toSum;       // ロト7最大合計値
   sumText = `合計値 ${fromVal}〜${toVal} `;
 }
 
