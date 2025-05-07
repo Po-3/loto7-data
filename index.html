@@ -319,6 +319,12 @@ const toSum = parseInt(document.getElementById("toSum").value) || 273;
 
   renderTable(filtered);
 
+const sumText = (fromSum !== 28 || toSum !== 273) ? `合計値 ${fromSum}〜${toSum} ` : "";
+
+const compText = oddEvenPattern
+  ? `構成：奇数${oddEvenPattern.split("-")[0]}・偶数${oddEvenPattern.split("-")[1]} `
+  : "";
+
 document.getElementById("resultCount").textContent =
   `検索結果：${filtered.length} 件（条件：` +
   (fromRound !== 1 || toRound !== 9999 ? `開催回 ${fromRound}〜${toRound} ` : "") +
