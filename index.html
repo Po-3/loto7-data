@@ -162,9 +162,11 @@
   <input type="number" id="sumMax" placeholder="最大" style="width:60px;">
 </label>
 <span class="info-icon" onclick="showPopup(event, '6つの本数字の合計値で絞り込みます')">ⓘ</span>
-
-<label>構成タイプ:
-  <select id="patternType">
+<div class="filter-block" style="display: flex; flex-direction: column;">
+  <span class="info-icon" onclick="showPopup(event, '選んだ奇数・偶数の比率に一致する回だけを表示します')">ⓘ</span>
+  <label style="margin-top: 4px;">
+    構成タイプ:
+    <select id="patternType" style="margin-left: 4px;">
       <option value="">（指定なし）</option>
       <option value="7-0">奇数7：偶数0</option>
       <option value="6-1">奇数6：偶数1</option>
@@ -174,9 +176,9 @@
       <option value="2-5">奇数2：偶数5</option>
       <option value="1-6">奇数1：偶数6</option>
       <option value="0-7">奇数0：偶数7</option>
-  </select>
-</label>
-<span class="info-icon" onclick="showPopup(event, '選んだ奇数・偶数の比率に一致する回だけを表示します')">ⓘ</span>
+    </select>
+  </label>
+</div>
 </div>
 
 <!-- ここから検索ボタンたち -->
