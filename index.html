@@ -282,8 +282,8 @@ function filterResults() {
   const toDate = document.getElementById("toDate").value;
   const checked = Array.from(document.querySelectorAll(".feature:checked")).map(el => el.value);
   const oddEvenPattern = document.getElementById("oddEvenPattern").value;
-  const fromSum = parseInt(document.getElementById("fromSum").value);
-  const toSum = parseInt(document.getElementById("toSum").value);
+const fromSum = parseInt(document.getElementById("fromSum").value) || 28;
+const toSum = parseInt(document.getElementById("toSum").value) || 273;
   const includeNumbers = document.getElementById("includeNumbers").value.split(",").map(s => s.trim()).filter(s => s !== "").map(Number);
   const excludeNumbers = document.getElementById("excludeNumbers").value.split(",").map(s => s.trim()).filter(s => s !== "").map(Number);
 
@@ -318,19 +318,6 @@ function filterResults() {
   });
 
   renderTable(filtered);
-
-let sumText = "";
-if (!isNaN(fromSum) || !isNaN(toSum)) {
-  const fromVal = isNaN(fromSum) ? 28 : fromSum;  // ロト7最小合計値
-  const toVal = isNaN(toSum) ? 273 : toSum;       // ロト7最大合計値
-  sumText = `合計値 ${fromVal}〜${toVal} `;
-}
-
-let compText = "";
-if (oddEvenPattern) {
-  const [odd, even] = oddEvenPattern.split("-");
-  compText = `構成：奇数${odd}・偶数${even} `;
-}
 
 document.getElementById("resultCount").textContent =
   `検索結果：${filtered.length} 件（条件：` +
