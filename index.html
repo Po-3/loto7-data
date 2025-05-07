@@ -158,7 +158,8 @@
   <div class="filter-block"><label><input class="feature" type="checkbox" value="高低ミックス"/> 高低ミックス</label><span class="info-icon" onclick="showPopup(event, '10未満と30超の数字が両方含まれる構成です。')">ⓘ</span></div>
   <div class="filter-block"><label><input class="feature" type="checkbox" value="キャリーあり"/> キャリーあり</label><span class="info-icon" onclick="showPopup(event, 'キャリーオーバーが発生していた回です。')">ⓘ</span></div>
   <div class="filter-block"><label>合計値: <input type="number" id="sumMin" placeholder="最小" style="width:60px;"> 〜 <input type="number" id="sumMax" placeholder="最大" style="width:60px;"></label><span class="info-icon" onclick="showPopup(event, '7つの本数字の合計値で絞り込みます')">ⓘ</span></div>
-  <div class="filter-block"><label>構成タイプ:
+<div class="filter-block" style="margin-top: 12px;">
+  <label>構成タイプ:
     <select id="patternType">
       <option value="">（指定なし）</option>
       <option value="7-0">奇数7：偶数0</option>
@@ -170,7 +171,9 @@
       <option value="1-6">奇数1：偶数6</option>
       <option value="0-7">奇数0：偶数7</option>
     </select>
-  </label><span class="info-icon" onclick="showPopup(event, '選んだ奇数・偶数の比率に一致する回だけを表示します')">ⓘ</span></div>
+  </label>
+  <span class="info-icon" onclick="showPopup(event, '選んだ奇数・偶数の比率に一致する回だけを表示します')">ⓘ</span>
+</div>
 </div>
 <button onclick="filterResults()">
   <i class="fas fa-magnifying-glass"></i> 検索
