@@ -93,7 +93,7 @@
     }
 
 
-.filters button {
+.filters-button {
   background-color: #ff8888;
   color: white;
   font-size: 16px;
@@ -108,15 +108,6 @@
   gap: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
-
-    
-
-
-    
-
-
-    
 
 
     td:nth-child(5) {
@@ -168,11 +159,10 @@
 <span class="info-icon" onclick="showPopup(event, 'キャリーオーバーが発生していた回です。')">ⓘ</span>
 </div>
 </div>
-<button onclick="filterResults()">
+<button class="filters-button" onclick="filterResults()">
   <i class="fas fa-magnifying-glass"></i> 検索
 </button>
-
-<button onclick="resetFilters()" style="margin-left: 10px;">
+<button class="filters-button" onclick="resetFilters()" style="margin-left: 10px;">
   <i class="fas fa-rotate-right"></i> リセット
 </button>
 <p id="resultCount" style="margin-top: 10px; font-weight: bold;"></p>
