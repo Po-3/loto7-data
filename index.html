@@ -320,6 +320,19 @@ function filterResults() {
 
   renderTable(filtered);
 
+let sumText = "";
+if (!isNaN(fromSum) || !isNaN(toSum)) {
+  const fromVal = isNaN(fromSum) ? "?" : fromSum;
+  const toVal = isNaN(toSum) ? "?" : toSum;
+  sumText = `合計値 ${fromVal}〜${toVal} `;
+}
+
+let compText = "";
+if (oddEvenPattern) {
+  const [odd, even] = oddEvenPattern.split("-");
+  compText = `構成：奇数${odd}・偶数${even} `;
+}
+
 document.getElementById("resultCount").textContent =
   `検索結果：${filtered.length} 件（条件：` +
   (fromRound !== 1 || toRound !== 9999 ? `開催回 ${fromRound}〜${toRound} ` : "") +
