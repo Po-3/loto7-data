@@ -153,6 +153,26 @@
 <span class="info-icon" onclick="showPopup(event, '10未満と30超の数字が両方含まれる構成です。')">ⓘ</span>
 <label><input class="feature" type="checkbox" value="キャリーあり"/> キャリーあり</label>
 <span class="info-icon" onclick="showPopup(event, 'キャリーオーバーが発生していた回です。')">ⓘ</span>
+<div style="display: flex; align-items: baseline; gap: 8px;">
+  <span>合計値 From:</span>
+  <input id="fromSum" type="number" min="21" max="255" style="width: 80px;" />
+  <span>To:</span>
+  <input id="toSum" type="number" min="21" max="255" style="width: 80px;" />
+</div>
+<div style="margin-top: 10px;">
+  <label for="oddEvenPattern">奇数・偶数構成:</label>
+  <select id="oddEvenPattern" style="margin-left: 4px;">
+    <option value="">全件</option>
+    <option value="7-0">奇数7・偶数0</option>
+    <option value="6-1">奇数6・偶数1</option>
+    <option value="5-2">奇数5・偶数2</option>
+    <option value="4-3">奇数4・偶数3</option>
+    <option value="3-4">奇数3・偶数4</option>
+    <option value="2-5">奇数2・偶数5</option>
+    <option value="1-6">奇数1・偶数6</option>
+    <option value="0-7">奇数0・偶数7</option>
+  </select>
+</div>
 </div>
 </div>
 <button onclick="filterResults()">
@@ -238,61 +258,78 @@ async function loadData() {
 
 // ★ここでloadDataの外にrenderTable関数を独立して書く！
 function renderTable(filteredData) {
-    const tbody = document.querySelector("#resultTable tbody");
-    tbody.innerHTML = "";
-    filteredData.forEach(item => {
-      const nums = [item["第1数字"], item["第2数字"], item["第3数字"], item["第4数字"], item["第5数字"], item["第6数字"], item["第7数字"]].join("・");
-      const bonus = [item["BONUS数字1"], item["BONUS数字2"]].join("・");
-      const row = `
-        <tr>
-          <td>${item["開催回"]}</td><td>${item["日付"]}</td><td>${nums}</td><td>${bonus}</td><td>${(item["特徴"] || "").split("・").map(f => `<a href="#" onclick="featureQuickSearch('${f}')">${f}</a>`).join("・")}</td>
-          <td>${formatYen(item["1等賞金"])}</td><td>${item["1等口数"]}</td>
-          <td>${formatYen(item["2等賞金"])}</td><td>${item["2等口数"]}</td>
-          <td>${formatYen(item["3等賞金"])}</td><td>${item["3等口数"]}</td>
-          <td>${formatYen(item["4等賞金"])}</td><td>${item["4等口数"]}</td>
-          <td>${formatYen(item["5等賞金"])}</td><td>${item["5等口数"]}</td>
-          <td>${formatYen(item["6等賞金"])}</td><td>${item["6等口数"]}</td>
-          <td>${formatYen(item["キャリーオーバー"])}</td>
-        </tr>`;
-      tbody.insertAdjacentHTML("beforeend", row);
-    });
-  }
+  const tbody = document.querySelector("#resultTable tbody");
+  tbody.innerHTML = "";
+  filteredData.forEach(item => {
+    const nums = [
+      item["第1数字"], item["第2数字"], item["第3数字"],
+      item["第4数字"], item["第5数字"], item["第6数字"], item["第7数字"]
+    ].join("・");
 
-  function filterResults() {
-    const fromRound = parseInt(document.getElementById("fromRound").value) || 1;
-    const toRound = parseInt(document.getElementById("toRound").value) || 9999;
-    const fromDate = document.getElementById("fromDate").value;
-    const toDate = document.getElementById("toDate").value;
-    const checked = Array.from(document.querySelectorAll(".feature:checked")).map(el => el.value);
+    const bonus = [item["BONUS数字1"], item["BONUS数字2"]].join("・");
+    const row = `
+      <tr>
+        <td>${item["開催回"]}</td><td>${item["日付"]}</td><td>${nums}</td><td>${bonus}</td>
+        <td>${(item["特徴"] || "").split("・").map(f => `<a href="#" onclick="featureQuickSearch('${f}')">${f}</a>`).join("・")}</td>
+        <td>${formatYen(item["1等賞金"])}</td><td>${item["1等口数"]}</td>
+        <td>${formatYen(item["2等賞金"])}</td><td>${item["2等口数"]}</td>
+        <td>${formatYen(item["3等賞金"])}</td><td>${item["3等口数"]}</td>
+        <td>${formatYen(item["4等賞金"])}</td><td>${item["4等口数"]}</td>
+        <td>${formatYen(item["5等賞金"])}</td><td>${item["5等口数"]}</td>
+        <td>${formatYen(item["6等賞金"])}</td><td>${item["6等口数"]}</td>
+        <td>${formatYen(item["キャリーオーバー"])}</td>
+      </tr>`;
+    tbody.insertAdjacentHTML("beforeend", row);
+  });
+}
+function filterResults() {
+  const fromRound = parseInt(document.getElementById("fromRound").value) || 1;
+  const toRound = parseInt(document.getElementById("toRound").value) || 9999;
+  const sumFrom = parseInt(document.getElementById("sumFrom").value);
+  const sumTo = parseInt(document.getElementById("sumTo").value);
+  const fromDate = document.getElementById("fromDate").value;
+  const toDate = document.getElementById("toDate").value;
+  const checked = Array.from(document.querySelectorAll(".feature:checked")).map(el => el.value);
+  const oddEvenPattern = document.getElementById("oddEvenPattern").value;
+  const includeNumbers = document.getElementById("includeNumbers").value.split(",").map(s => s.trim()).filter(s => s !== "").map(Number);
+  const excludeNumbers = document.getElementById("excludeNumbers").value.split(",").map(s => s.trim()).filter(s => s !== "").map(Number);
 
-    
-    const includeNumbers = document.getElementById("includeNumbers").value.split(",").map(s => s.trim()).filter(s => s !== "").map(Number);
-    const excludeNumbers = document.getElementById("excludeNumbers").value.split(",").map(s => s.trim()).filter(s => s !== "").map(Number);
-    const filtered = data.filter(item => {
-      const round = parseInt(item["開催回"]);
-      const date = item["日付"];
+  const filtered = data.filter(item => {
+    const round = parseInt(item["開催回"]);
+    const date = item["日付"];
+    const nums = [
+      item["第1数字"], item["第2数字"], item["第3数字"],
+      item["第4数字"], item["第5数字"], item["第6数字"], item["第7数字"]
+    ].map(n => Number(n));
 
-const formatToDateStr = d => new Date(d).toISOString().split("T")[0];
-const inDate = (!fromDate || formatToDateStr(date) >= fromDate) &&
-               (!toDate   || formatToDateStr(date) <= toDate);
+    const oddCount = nums.filter(n => n % 2 === 1).length;
+    const evenCount = 7 - oddCount;
+    const patternMatch = !oddEvenPattern || oddEvenPattern === `${oddCount}-${evenCount}`;
 
+    const formatToDateStr = d => new Date(d).toISOString().split("T")[0];
+    const inDate = (!fromDate || formatToDateStr(date) >= fromDate) &&
+                   (!toDate   || formatToDateStr(date) <= toDate);
 
-      const inRound = round >= fromRound && round <= toRound;
-      const hasFeature = checked.length === 0 || checked.every(f => (item["特徴"]?.split("・") || []).includes(f));
-      
-    const nums = [item["第1数字"], item["第2数字"], item["第3数字"], item["第4数字"], item["第5数字"], item["第6数字"], item["第7数字"]].map(n => Number(n));
+    const inRound = round >= fromRound && round <= toRound;
+    const hasFeature = checked.length === 0 || checked.every(f => (item["特徴"]?.split("・") || []).includes(f));
+
+    const sum = nums.reduce((a, b) => a + b, 0);
+    const inSumRange = (isNaN(sumFrom) || sum >= sumFrom) &&
+                       (isNaN(sumTo) || sum <= sumTo);
+
     const includeMatch = includeNumbers.length === 0 || includeNumbers.every(n => nums.includes(n));
     const excludeMatch = excludeNumbers.length === 0 || excludeNumbers.every(n => !nums.includes(n));
-    return inRound && inDate && hasFeature && includeMatch && excludeMatch;
-    
-    });
 
-    renderTable(filtered);
-    document.getElementById("resultCount").textContent = `検索結果：${filtered.length} 件（条件：` +
+    return inRound && inDate && hasFeature && includeMatch && excludeMatch && inSumRange && patternMatch;
+  });
+
+  renderTable(filtered);
+
+  document.getElementById("resultCount").textContent = `検索結果：${filtered.length} 件（条件：` +
     (fromRound !== 1 || toRound !== 9999 ? `開催回 ${fromRound}〜${toRound} ` : "") +
     (fromDate || toDate ? `開催日 ${fromDate || '未指定'}〜${toDate || '未指定'} ` : "") +
     (checked.length ? `特徴：` + checked.join("・") : "全件") + `)`;
-  }
+}
 
   function scrollTableToTop() {
     document.getElementById("scrollContainer").scrollTo({ top: 0, behavior: "smooth" });
@@ -316,6 +353,9 @@ const inDate = (!fromDate || formatToDateStr(date) >= fromDate) &&
     document.getElementById("resultCount").textContent = "";
     document.getElementById("includeNumbers").value = "";
     document.getElementById("excludeNumbers").value = "";
+document.getElementById("sumFrom").value = "";
+document.getElementById("sumTo").value = "";
+document.getElementById("oddEvenPattern").value = "";
     renderTable(data);
 
 
