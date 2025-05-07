@@ -328,19 +328,20 @@ function filterResults() {
     loadData().then(() => attachSortEvents());
   });
 
-  function resetFilters() {
-    document.getElementById("fromRound").value = "";
-    document.getElementById("toRound").value = "";
-    document.getElementById("fromDate").value = "";
-    document.getElementById("toDate").value = "";
-    document.querySelectorAll(".feature").forEach(cb => cb.checked = false);
-    document.getElementById("resultCount").textContent = "";
-    document.getElementById("includeNumbers").value = "";
-    document.getElementById("excludeNumbers").value = "";
-    renderTable(data);
-
-
-  }
+function resetFilters() {
+  document.getElementById("fromRound").value = "";
+  document.getElementById("toRound").value = "";
+  document.getElementById("fromDate").value = "";
+  document.getElementById("toDate").value = "";
+  document.querySelectorAll(".feature").forEach(cb => cb.checked = false);
+  document.getElementById("includeNumbers").value = "";
+  document.getElementById("excludeNumbers").value = "";
+  document.getElementById("sumMin").value = "";
+  document.getElementById("sumMax").value = "";
+  document.getElementById("patternType").value = "";
+  document.getElementById("resultCount").textContent = "";
+  renderTable(data);
+}
 
 
 function featureQuickSearch(feature) {
