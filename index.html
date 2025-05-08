@@ -397,14 +397,15 @@ function sortTable(columnIndex) {
     let bText = b.children[columnIndex].textContent.trim();
 
     // 🔽 ここがポイント：「・」区切りがある列（ボーナスなど）の1番目の数値を使って比較
-    const extractFirstNumber = str => {
-      const match = str.match(/\d+/);
-      return match ? parseInt(match[0], 10) : 0;
-    };
+const extractNumber = str => {
+  if (!str) return 0;
+  const cleaned = str.replace(/[^\d]/g, ""); // 数字以外（カンマ・円など）を除去
+  return parseInt(cleaned, 10) || 0;
+};
 
     // 🔄 修正対象：index 3 = ボーナス列、index 5 以降 = 賞金列など数値として比較すべき列
-    const aVal = (columnIndex === 3 || columnIndex === 0 || columnIndex >= 5) ? extractFirstNumber(aText) : aText;
-    const bVal = (columnIndex === 3 || columnIndex === 0 || columnIndex >= 5) ? extractFirstNumber(bText) : bText;
+const aVal = (columnIndex === 3 || columnIndex === 0 || columnIndex >= 5) ? extractNumber(aText) : aText;
+const bVal = (columnIndex === 3 || columnIndex === 0 || columnIndex >= 5) ? extractNumber(bText) : bText;
 
     return isAsc
       ? (aVal > bVal ? 1 : -1)
