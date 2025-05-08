@@ -4,6 +4,9 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<!-- AdSense 広告スクリプト -->
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2136896785327919"
+     crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <title>ロト7結果検索ツール</title>
 <style>
@@ -154,11 +157,9 @@
 <label><input class="feature" type="checkbox" value="キャリーあり"/> キャリーあり</label>
 <span class="info-icon" onclick="showPopup(event, 'キャリーオーバーが発生していた回です。')">ⓘ</span>
 <div style="display: flex; align-items: baseline; gap: 8px;">
-  <span>合計値 From:</span>
-  <input id="fromSum" type="number" min="28" max="273" style="width: 80px;" />
-  <span>To:</span>
-  <input id="toSum" type="number" min="28" max="273" style="width: 80px;" />
-
+<label>合計値 From:<input id="fromSum" type="number" min="28" max="273" style="width: 80px;" /></label>
+<label>To:<input id="toSum" type="number" min="28" max="273" style="width: 80px;" /></label>
+</div>
   <label for="oddEvenPattern">奇数・偶数構成:</label>
   <select id="oddEvenPattern" style="margin-left: 4px;">
     <option value="">全件</option>
@@ -171,7 +172,6 @@
     <option value="1-6">奇数1・偶数6</option>
     <option value="0-7">奇数0・偶数7</option>
   </select>
-</div>
 </div>
 </div>
 <button onclick="filterResults()">
@@ -282,8 +282,8 @@ function filterResults() {
   const toDate = document.getElementById("toDate").value;
   const checked = Array.from(document.querySelectorAll(".feature:checked")).map(el => el.value);
   const oddEvenPattern = document.getElementById("oddEvenPattern").value;
-  const fromSum = parseInt(document.getElementById("fromSum").value);
-  const toSum = parseInt(document.getElementById("toSum").value);
+const fromSum = parseInt(document.getElementById("fromSum").value) || 28;
+const toSum = parseInt(document.getElementById("toSum").value) || 273;
   const includeNumbers = document.getElementById("includeNumbers").value.split(",").map(s => s.trim()).filter(s => s !== "").map(Number);
   const excludeNumbers = document.getElementById("excludeNumbers").value.split(",").map(s => s.trim()).filter(s => s !== "").map(Number);
 
@@ -319,18 +319,11 @@ function filterResults() {
 
   renderTable(filtered);
 
-let sumText = "";
-if (!isNaN(fromSum) || !isNaN(toSum)) {
-  const fromVal = isNaN(fromSum) ? "?" : fromSum;
-  const toVal = isNaN(toSum) ? "?" : toSum;
-  sumText = `合計値 ${fromVal}〜${toVal} `;
-}
+const sumText = (fromSum !== 28 || toSum !== 273) ? `合計値 ${fromSum}〜${toSum} ` : "";
 
-let compText = "";
-if (oddEvenPattern) {
-  const [odd, even] = oddEvenPattern.split("-");
-  compText = `構成：奇数${odd}・偶数${even} `;
-}
+const compText = oddEvenPattern
+  ? `構成：奇数${oddEvenPattern.split("-")[0]}・偶数${oddEvenPattern.split("-")[1]} `
+  : "";
 
 document.getElementById("resultCount").textContent =
   `検索結果：${filtered.length} 件（条件：` +
