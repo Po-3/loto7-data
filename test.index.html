@@ -86,6 +86,30 @@
     #scrollTopBtn { bottom: 70px; }
     #scrollBottomBtn { bottom: 20px; }
 
+.button-row {
+  display: flex;
+  justify-content: flex-start; /* 左寄せ。中央揃えならcenterに */
+  align-items: center;
+  gap: 6px; /* ボタン間の隙間は適度に */
+  margin-bottom: 8px;
+}
+.button-row button, .button-row .csv-btn {
+  flex: none;        /* 幅は広がらない */
+  min-width: unset;  /* 最小幅指定なし。必要最小限の幅に */
+  width: auto;       /* 幅は自動 */
+  padding: 7px 10px;
+  font-size: 15px;
+}
+@media screen and (max-width: 600px) {
+  .button-row {
+    gap: 3px;
+  }
+  .button-row button, .button-row .csv-btn {
+    font-size: 14px;
+    padding: 6px 7px;
+  }
+}
+
     .info-icon {
       display: inline-block;
       margin-left: 6px;
@@ -230,18 +254,17 @@
 </select>
 </div>
 </div>
-<button onclick="filterResults()">
-  <i class="fas fa-magnifying-glass"></i> 検索
-</button>
-
-<button onclick="resetFilters()" style="margin-left: 10px;">
-  <i class="fas fa-rotate-right"></i> リセット
-</button>
-
-<!-- ★CSV出力ボタン追加 -->
-<button onclick="downloadCSV()" class="csv-btn" style="margin-left: 10px;">
-  <i class="fas fa-file-csv"></i> CSV出力
-</button>
+<div class="button-row">
+  <button onclick="filterResults()">
+    <i class="fas fa-magnifying-glass"></i> 検索
+  </button>
+  <button onclick="resetFilters()">
+    <i class="fas fa-rotate-right"></i> リセット
+  </button>
+  <button onclick="downloadCSV()" class="csv-btn">
+    <i class="fas fa-file-csv"></i> CSV出力
+  </button>
+</div>
 
 <p id="resultCount" style="margin-top: 10px; font-weight: bold;"></p>
 
@@ -378,7 +401,11 @@ function renderTable(filteredData) {
     const row = `
       <tr>
         <td>${item["開催回"]}</td><td>${item["日付"]}</td><td>${nums}</td><td>${bonus}</td>
-        <td>${(item["特徴"] || "").split("・").map(f => `<a href="#" onclick="featureQuickSearch('${f}')">${f}</a>`).join("・")}</td>
+        <td>${
+  Array.isArray(item["特徴"])
+    ? item["特徴"].map(f => `<a href="#" onclick="featureQuickSearch('${f}')">${f}</a>`).join("・")
+    : ""
+}</td>
         <td>${formatYen(item["1等賞金"])}</td><td>${item["1等口数"]}</td>
         <td>${formatYen(item["2等賞金"])}</td><td>${item["2等口数"]}</td>
         <td>${formatYen(item["3等賞金"])}</td><td>${item["3等口数"]}</td>
@@ -503,15 +530,16 @@ function sortTable(columnIndex) {
     let bText = b.children[columnIndex].textContent.trim();
 
     // 🔽 ここがポイント：「・」区切りがある列（ボーナスなど）の1番目の数値を使って比較
-const extractNumber = str => {
-  if (!str) return 0;
-  const cleaned = str.replace(/[^\d]/g, ""); // 数字以外（カンマ・円など）を除去
-  return parseInt(cleaned, 10) || 0;
-};
+const extractNumberFromYen = str => Number(str.replace(/[^\d]/g, '')) || 0;
 
-    // 🔄 修正対象：index 3 = ボーナス列、index 5 以降 = 賞金列など数値として比較すべき列
-const aVal = (columnIndex === 3 || columnIndex === 0 || columnIndex >= 5) ? extractNumber(aText) : aText;
-const bVal = (columnIndex === 3 || columnIndex === 0 || columnIndex >= 5) ? extractNumber(bText) : bText;
+// ...
+const aVal = (columnIndex === 0 || columnIndex === 3 || columnIndex >= 5)
+  ? extractNumberFromYen(aText)
+  : aText;
+
+const bVal = (columnIndex === 0 || columnIndex === 3 || columnIndex >= 5)
+  ? extractNumberFromYen(bText)
+  : bText;
 
     return isAsc
       ? (aVal > bVal ? 1 : -1)

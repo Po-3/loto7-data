@@ -119,7 +119,7 @@
 
 
     td:nth-child(5) {
-      font-size: 14px;
+      font-size: 16px;
     }
 
 
@@ -174,10 +174,10 @@
 <table id="resultTable">
 <thead>
 <tr>
-<th>開催回</th><th>日付</th><th>本数字</th><th>ボーナス</th><th>特徴</th>
-<th>1等賞金</th><th>1等口数</th><th>2等賞金</th><th>2等口数</th>
-<th>3等賞金</th><th>3等口数</th><th>4等賞金</th><th>4等口数</th>
-<th>5等賞金</th><th>5等口数</th><th>6等賞金</th><th>6等口数</th><th>キャリーオーバー</th>
+<th style="cursor: pointer;" title="クリックで並び替え">開催回 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">日付 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">本数字 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">ボーナス 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">特徴 🔽</th>
+<th style="cursor: pointer;" title="クリックで並び替え">1等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">1等口数 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">2等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">2等口数 🔽</th>
+<th style="cursor: pointer;" title="クリックで並び替え">3等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">3等口数 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">4等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">4等口数 🔽</th>
+<th style="cursor: pointer;" title="クリックで並び替え">5等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">5等口数 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">6等賞金 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">6等口数 🔽</th><th style="cursor: pointer;" title="クリックで並び替え">キャリーオーバー 🔽</th>
 </tr>
 </thead>
 <tbody></tbody>
@@ -222,19 +222,28 @@ function featureQuickSearch(feature) {
     const intVal = parseInt(value);
     return isNaN(intVal) ? value : intVal.toLocaleString() + "円";
   }
-
-  async function loadData() {
+async function loadData() {
+  try {
     const res = await fetch("./loto7.json");
     data = await res.json();
-    renderTable(data);
+    
+    // データを開催回降順に並べ替え
+    data.sort((a, b) => Number(b["開催回"]) - Number(a["開催回"]));
 
-      const dates = data.map(item => item["日付"]).sort();
-      const latest = dates[dates.length - 1];
-      document.getElementById("lastUpdated").innerHTML = `データ更新日：${latest} ｜ツールVer：<a href="https://www.kujitonari.net/loto_search_tool" target="_blank" style="color:#d94f4f;text-decoration:underline;">1.01</a>`;
+    // データ更新日を取得
+    const latestDate = new Date(Math.max(...data.map(item => new Date(item["日付"]))));
+    const latestDateString = latestDate.toLocaleDateString("ja-JP");
 
+    document.getElementById("lastUpdated").innerHTML = `データ更新日：${latestDateString} ｜ツールVer：<a href="https://www.kujitonari.net/loto_search_tool" target="_blank" style="color:#d94f4f;text-decoration:underline;">1.11.1</a>`;
+
+    renderTable(data); // ← ここで呼ぶだけ（中に定義しない！）
+  } catch (error) {
+    console.error("データ読み込みエラー:", error);
   }
+}
 
-  function renderTable(filteredData) {
+// ★ここでloadDataの外にrenderTable関数を独立して書く！
+function renderTable(filteredData) {
     const tbody = document.querySelector("#resultTable tbody");
     tbody.innerHTML = "";
     filteredData.forEach(item => {
@@ -270,7 +279,7 @@ function featureQuickSearch(feature) {
       const date = item["日付"];
       const inRound = round >= fromRound && round <= toRound;
       const inDate = (!fromDate || date >= fromDate) && (!toDate || date <= toDate);
-      const hasFeature = checked.length === 0 || checked.every(f => item["特徴"]?.includes(f));
+      const hasFeature = checked.length === 0 || checked.every(f => (item["特徴"]?.split("・") || []).includes(f));
       
     const nums = [item["第1数字"], item["第2数字"], item["第3数字"], item["第4数字"], item["第5数字"], item["第6数字"], item["第7数字"]].map(n => Number(n));
     const includeMatch = includeNumbers.length === 0 || includeNumbers.every(n => nums.includes(n));
@@ -293,7 +302,7 @@ function featureQuickSearch(feature) {
   }
 
   document.addEventListener("DOMContentLoaded", () => {
-    loadData();
+    loadData().then(() => attachSortEvents());
   });
 
   function resetFilters() {
@@ -319,6 +328,35 @@ function featureQuickSearch(feature) {
     cb.checked = cb.value === feature;
   });
   filterResults();
+}
+
+
+let sortDirection = {};
+
+function sortTable(columnIndex) {
+  const table = document.getElementById("resultTable");
+  const tbody = table.querySelector("tbody");
+  const rows = Array.from(tbody.querySelectorAll("tr"));
+  const isAsc = !sortDirection[columnIndex];
+  sortDirection[columnIndex] = isAsc;
+
+  rows.sort((a, b) => {
+    const aText = a.children[columnIndex].textContent.trim().replace(/[^\d.-]/g, "");
+    const bText = b.children[columnIndex].textContent.trim().replace(/[^\d.-]/g, "");
+    const aVal = isNaN(aText) ? aText : parseFloat(aText);
+    const bVal = isNaN(bText) ? bText : parseFloat(bText);
+    return isAsc ? (aVal > bVal ? 1 : -1) : (aVal < bVal ? 1 : -1);
+  });
+
+  rows.forEach(row => tbody.appendChild(row));
+}
+
+// ソート用クリックイベント登録（loadData完了後に実行されるようにする）
+function attachSortEvents() {
+  const headers = document.querySelectorAll("#resultTable th");
+  headers.forEach((header, index) => {
+    header.addEventListener("click", () => sortTable(index));
+  });
 }
 
 </script>
