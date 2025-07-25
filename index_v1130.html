@@ -401,7 +401,11 @@ function renderTable(filteredData) {
     const row = `
       <tr>
         <td>${item["開催回"]}</td><td>${item["日付"]}</td><td>${nums}</td><td>${bonus}</td>
-        <td>${(item["特徴"] || "").split("・").map(f => `<a href="#" onclick="featureQuickSearch('${f}')">${f}</a>`).join("・")}</td>
+        <td>${
+  Array.isArray(item["特徴"])
+    ? item["特徴"].map(f => `<a href="#" onclick="featureQuickSearch('${f}')">${f}</a>`).join("・")
+    : ""
+}</td>
         <td>${formatYen(item["1等賞金"])}</td><td>${item["1等口数"]}</td>
         <td>${formatYen(item["2等賞金"])}</td><td>${item["2等口数"]}</td>
         <td>${formatYen(item["3等賞金"])}</td><td>${item["3等口数"]}</td>
